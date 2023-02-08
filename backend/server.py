@@ -37,7 +37,7 @@ def parseDataAndPush(track):
         return {"msg": "Error saving track to database"}, HTTPStatus.BAD_REQUEST
     return track_data
 
-@app.route('/', methods=['POST'])
+@app.route('/song', methods=['POST'])
 def test():
     data = request.get_json(force=True)
     try:

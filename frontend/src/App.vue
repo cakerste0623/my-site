@@ -5,11 +5,15 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
 
 export default {
   name: 'App',
   components: {
     HelloWorld
+  },
+  mounted() {
+    axios.get('/api/check').then(response => (console.log(response)))
   }
 }
 </script>
