@@ -1,5 +1,21 @@
 <template>
   <v-container>
+    <v-app-bar
+      color="primary"
+      density="compact"
+    >
+      <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-title>Welcome</v-app-bar-title>
+    </v-app-bar>
+    <v-navigation-drawer
+      v-model="drawer"
+      location="left"
+      temporary
+    >
+      <v-list
+        :items="items"
+      ></v-list>
+    </v-navigation-drawer>
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
@@ -98,6 +114,9 @@ export default {
   name: 'HelloWorld',
 
   data: () => ({
+    items: ["Home", "What am I listening to?", "Resume"],
+    drawer: false,
+
     ecosystem: [
       {
         text: 'vuetify-loader',
@@ -145,5 +164,11 @@ export default {
       },
     ],
   }),
+
+  watch: {
+    group () {
+      this.drawer = false
+    }
+  }
 }
 </script>
