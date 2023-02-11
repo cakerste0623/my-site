@@ -14,7 +14,7 @@
     >
       <v-list>
         <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
-        <v-list-item prepend-icon="mdi-music" title="What am I listening to?" value="song"></v-list-item>
+        <v-list-item prepend-icon="mdi-music" title="What am I listening to?" value="song" link @click="$router.push({ path: '/song' })"></v-list-item>
         <v-list-item prepend-icon="mdi-file-account" title="Resume" value="resume"></v-list-item>
       </v-list>
     </v-navigation-drawer>
