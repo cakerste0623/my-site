@@ -12,9 +12,11 @@
       location="left"
       temporary
     >
-      <v-list
-        :items="items"
-      ></v-list>
+      <v-list>
+        <v-list-item prepend-icon="mdi-home-city" title="Home" value="home"></v-list-item>
+        <v-list-item prepend-icon="mdi-music" title="What am I listening to?" value="song"></v-list-item>
+        <v-list-item prepend-icon="mdi-file-account" title="Resume" value="resume"></v-list-item>
+      </v-list>
     </v-navigation-drawer>
     <v-row class="text-center">
       <v-col cols="12">
@@ -114,7 +116,6 @@ export default {
   name: 'HelloWorld',
 
   data: () => ({
-    items: ["Home", "What am I listening to?", "Resume"],
     drawer: false,
 
     ecosystem: [
