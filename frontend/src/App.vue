@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-main>
-      <router-view />
       <v-app-bar
       color="primary"
       density="compact"
@@ -21,6 +20,7 @@
       </v-list>
     </v-navigation-drawer>
     </v-main>
+    <router-view />
   </v-app>
 </template>
 
