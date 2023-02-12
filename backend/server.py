@@ -53,11 +53,5 @@ def post_and_get_song():
         latest_song = songs.find_one(sort=[('createTimestamp', DESCENDING)])
         return jsonify(latest_song), HTTPStatus.OK
 
-    
-
-@app.route('/check', methods=['GET'])
-def check():
-    return "Check successful"
-
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9090, debug=True)
