@@ -14,6 +14,8 @@ services:
             context: backend
         environment:
           - FLASK_APP=server.py
+        env_file:
+          - .env
         depends_on:
           - mongodb
         volumes:

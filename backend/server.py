@@ -1,5 +1,6 @@
 from http import HTTPStatus
 import json
+import os
 from flask import Flask, jsonify, request
 import hashlib
 import datetime
@@ -12,8 +13,8 @@ client = MongoClient("mongodb:27017")
 db = client.server
 songs = db.songs
 
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="85d5a82cec1541b8b1dea6b035b097a8", 
-                                                           client_secret="9c6945e57e6647dd9874ac74010a4294"))
+sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=os.environ['CLIENT_ID'], 
+                                                           client_secret=os.environ['CLIENT_SECRET']))
 
 def createId(data):
     hash = hashlib.md5()
