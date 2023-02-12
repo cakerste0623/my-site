@@ -1,13 +1,24 @@
 <template>
-  <v-container>
-    <v-row class="text-center">
-      <v-col class="mb-4">
+  <v-app>
+    <v-container>
+      <v-row class="x-row grey lighten-5" align="start" justify="center">
         <h1 class="display-2 font-weight-bold mb-3">
-          What am I listening to?: {{ song.name }}
+          What am I listening to???????????
         </h1>
-      </v-col>
-    </v-row>
-  </v-container>
+      </v-row>
+      <v-row class="x-row grey lighten-5" align="start" justify="center">
+        <h2>
+          {{ song.name }}
+        </h2>
+      </v-row>
+      <v-row align="start" justify="center">
+        <div class="ma 4">
+          <v-img width="300" :src=song.coverImage>
+          </v-img>
+        </div>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
