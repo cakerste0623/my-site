@@ -3,7 +3,7 @@ import json
 from flask import Flask, jsonify, request
 import hashlib
 import datetime
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -37,15 +37,22 @@ def parseDataAndPush(track):
         return {"msg": "Error saving track to database"}, HTTPStatus.BAD_REQUEST
     return track_data
 
-@app.route('/song', methods=['POST'])
-def test():
-    data = request.get_json(force=True)
-    try:
-        track = sp.track(track_id=data.get('id'))
-    except:
-        return jsonify({"msg": "Could not find track with the given id"}), HTTPStatus.NOT_FOUND
-    t = parseDataAndPush(track)
-    return jsonify(t), HTTPStatus.OK
+@app.route('/song', methods=['POST', 'GET'])
+def post_and_get_song():
+    if request.method == 'POST':
+        data = request.get_json(force=True)
+
+        try:
+            track = sp.track(track_id=data.get('id'))
+        except:
+            return jsonify({"msg": "Could not find track with the given id"}), HTTPStatus.NOT_FOUND
+        t = parseDataAndPush(track)
+        return jsonify(t), HTTPStatus.OK
+    else:
+        latest_song = songs.find_one(sort=[('createTimestamp', DESCENDING)])
+        return latest_song
+
+    
 
 @app.route('/check', methods=['GET'])
 def check():
