@@ -50,7 +50,7 @@ def post_and_get_song():
         return jsonify(t), HTTPStatus.OK
     else:
         latest_song = songs.find_one(sort=[('createTimestamp', DESCENDING)])
-        return latest_song
+        return jsonify(latest_song), HTTPStatus.OK
 
     
 
