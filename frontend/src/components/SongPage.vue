@@ -1,7 +1,15 @@
 <template>
-  <h1>Song Page</h1>
+  <v-container>
+    <v-row class="text-center">
+      <v-col class="mb-4">
+        <h1 class="display-2 font-weight-bold mb-3">
+          What am I listening to?
+        </h1>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-
+  console.log("Here")
 </script>
