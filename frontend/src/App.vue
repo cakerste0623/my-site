@@ -25,8 +25,6 @@
 </template>
 
 <script>
-import axios from "axios"
-
 export default {
   name: 'App',
 
@@ -39,7 +37,6 @@ export default {
   }),
 
   mounted() {
-    axios.get('/api/check')
   }
 }
 </script>
