@@ -9,7 +9,8 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 app = Flask(__name__)
-client = MongoClient("mongodb:27017")
+# TODO change these credentials (obviously) and use env variables instead
+client = MongoClient("mongodb://collin:password@mongodb:27017/?authSource=server")
 db = client.server
 songs = db.songs
 
