@@ -18,7 +18,10 @@
             Song: {{ song.name }}
           </h3>
           <h3>
-            Artist: {{ song.artist }}
+            Artist(s): 
+            <a v-for="(artist,i) in song.artists" :key="i">
+              {{ artist }}<span v-if="i != song.artists.length - 1">, </span>
+            </a>
           </h3>
           <h3>
             Album: {{ song.album }}

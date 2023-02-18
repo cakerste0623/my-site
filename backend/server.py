@@ -25,10 +25,16 @@ def createId(data):
     hash.update(encoded)
     return str(hash.hexdigest())
 
+def getArtists(artists):
+    list_of_artists = []
+    for artist in artists:
+        list_of_artists.append(artist.get('name'))
+    return list_of_artists
+
 def parseDataAndPush(track):
     track_data = {}
     track_data['name'] = track.get('name')
-    track_data['artist'] = track.get('artists')[0].get('name')
+    track_data['artists'] = getArtists(track.get('artists'))
     track_data['album'] = track.get('album').get('name')
     track_data['releaseYear'] = track.get('album').get('release_date')[0:4]
     track_data['coverImage'] = track.get('album').get('images')[0].get('url')
