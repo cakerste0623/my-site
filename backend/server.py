@@ -4,9 +4,11 @@ import os
 from flask import Flask, jsonify, request
 import hashlib
 import datetime
+import jwt
 from pymongo import MongoClient, DESCENDING
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 # TODO change these credentials (obviously) and use env variables instead
@@ -53,6 +55,17 @@ def post_and_get_song():
     else:
         latest_song = songs.find_one(sort=[('createTimestamp', DESCENDING)])
         return jsonify(latest_song), HTTPStatus.OK
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json(force=True)
+    users = db.users
+    user = users.find_one({"username": data.get('username')})
+    if user is None or not check_password_hash(user.get('password'), data.get('password')):
+        return {"msg": "Unable to log in"}, HTTPStatus.UNAUTHORIZED
+    
+    token = jwt.encode({"user": user.get('username')}, os.environ['JWT_KEY'], algorithm="HS256")
+    return jsonify({"token": token}), HTTPStatus.OK
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=9090, debug=True)
