@@ -13,14 +13,14 @@
             <v-img width="300" :src=song.coverImage>
             </v-img>
         </v-col>
-        <v-col cols=3>
-          <h3 align="center">
+        <v-col cols=3 align-self=center>
+          <h3>
             Song: {{ song.name }}
           </h3>
-          <h3 align="center">
+          <h3>
             Artist: {{ song.artist }}
           </h3>
-          <h3 align="center">
+          <h3>
             Album: {{ song.album }}
           </h3>
         </v-col>
@@ -42,3 +42,9 @@
     }
   }
 </script>
+
+<style scoped>
+  h3 {
+    text-align: center;
+  }
+</style>
