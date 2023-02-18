@@ -23,6 +23,9 @@
           <h3>
             Album: {{ song.album }}
           </h3>
+          <h3>
+            Year: {{ song.releaseYear }}
+          </h3>
         </v-col>
       </v-row>
     </v-container>

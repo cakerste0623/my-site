@@ -30,7 +30,7 @@ def parseDataAndPush(track):
     track_data['name'] = track.get('name')
     track_data['artist'] = track.get('artists')[0].get('name')
     track_data['album'] = track.get('album').get('name')
-    track_data['releaseDate'] = track.get('album').get('release_date')
+    track_data['releaseYear'] = track.get('album').get('release_date')[0:4]
     track_data['coverImage'] = track.get('album').get('images')[0].get('url')
     track_data['createTimestamp'] = str(datetime.datetime.now())
     track_data['_id'] = createId(track_data)
@@ -44,6 +44,13 @@ def parseDataAndPush(track):
 @app.route('/song', methods=['POST', 'GET'])
 def post_and_get_song():
     if request.method == 'POST':
+        token = request.headers.get('Authorization')
+        if not token:
+            return {"msg": "No token given"}, HTTPStatus.UNAUTHORIZED
+        decoded_token = jwt.decode(token, os.environ['JWT_KEY'], algorithms=["HS256"])
+        if decoded_token.get('user') is None:
+            return {"msg": "Invalid token"}, HTTPStatus.UNAUTHORIZED
+
         data = request.get_json(force=True)
 
         try:
