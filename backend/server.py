@@ -13,7 +13,7 @@ from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 # TODO change these credentials (obviously) and use env variables instead
-client = MongoClient("mongodb://collin:password@mongodb:27017/?authSource=server")
+client = MongoClient("mongodb", username=os.environ['MONGO_USERNAME'], password=os.environ['MONGO_PWD'], authSource="server")
 db = client.server
 songs = db.songs
 
