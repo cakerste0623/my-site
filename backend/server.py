@@ -12,7 +12,6 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
-# TODO change these credentials (obviously) and use env variables instead
 client = MongoClient("mongodb", username=os.environ['MONGO_USERNAME'], password=os.environ['MONGO_PWD'], authSource="server")
 db = client.server
 songs = db.songs
@@ -71,9 +70,11 @@ def post_and_get_song():
             return jsonify({"msg": "Could not find track with the given id"}), HTTPStatus.NOT_FOUND
         t = parseDataAndPush(track)
         return jsonify(t), HTTPStatus.OK
-    else:
+    elif request.method == 'GET':
         latest_song = songs.find_one(sort=[('createTimestamp', DESCENDING)])
         return jsonify(latest_song), HTTPStatus.OK
+    else:
+        return {"msg": "Method not supported"}, HTTPStatus.METHOD_NOT_ALLOWED
 
 @app.route('/login', methods=['POST'])
 def login():
