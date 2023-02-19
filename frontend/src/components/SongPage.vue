@@ -29,6 +29,9 @@
           <h3>
             Year: {{ song.releaseYear }}
           </h3>
+          <h3>
+            Genre: {{ song.genre }}
+          </h3> 
         </v-col>
       </v-row>
     </v-container>
