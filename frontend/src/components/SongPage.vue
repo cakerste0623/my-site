@@ -34,6 +34,26 @@
           </h3> 
         </v-col>
       </v-row>
+      <v-row class="mt-8" justify="center">
+        <h1 class="display-2 font-weight-bold mb-3">
+          What is this?
+        </h1>
+      </v-row>
+      <v-row>
+        <h3>
+          Well, if you know anything about me, I'm pretty much listening to music all day everyday. I'm using this page to show what my favorite song is at the moment. Hope you can find a new favorite song here :)
+        </h3>
+      </v-row>
+      <v-row class="mt-8" justify="center">
+        <h1>
+          How does it work?
+        </h1>
+      </v-row>
+      <v-row>
+        <h3>
+          This site has a few APIs running in the backend. The POST version of the API adds a song to the database, and then the GET version of the API retrieves the most recently added song from the database. The POST API requires a JWT that can only be acquired through a different login API, so only I can hit that API.
+        </h3>
+      </v-row>
     </v-container>
   </v-app>
 </template>
