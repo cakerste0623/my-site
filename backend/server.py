@@ -11,6 +11,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from werkzeug.security import check_password_hash
 
+# Time that the JWT is valid for (in seconds)
+exp_time = 300
+
 app = Flask(__name__)
 client = MongoClient("mongodb", username=os.environ['MONGO_USERNAME'], password=os.environ['MONGO_PWD'], authSource="server")
 db = client.server
@@ -58,7 +61,12 @@ def post_and_get_song():
         token = request.headers.get('Authorization')
         if not token:
             return {"msg": "No token given"}, HTTPStatus.UNAUTHORIZED
-        decoded_token = jwt.decode(token, os.environ['JWT_KEY'], algorithms=["HS256"])
+
+        try:
+            decoded_token = jwt.decode(token, os.environ['JWT_KEY'], algorithms=["HS256"])
+        except jwt.ExpiredSignatureError:
+            return {"msg": "Expired Token"}, HTTPStatus.UNAUTHORIZED
+
         if decoded_token.get('user') is None:
             return {"msg": "Invalid token"}, HTTPStatus.UNAUTHORIZED
 
@@ -84,7 +92,7 @@ def login():
     if user is None or not check_password_hash(user.get('password'), data.get('password')):
         return {"msg": "Unable to log in"}, HTTPStatus.UNAUTHORIZED
     
-    token = jwt.encode({"user": user.get('username')}, os.environ['JWT_KEY'], algorithm="HS256")
+    token = jwt.encode({"user": user.get('username'), "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=exp_time)}, os.environ['JWT_KEY'], algorithm="HS256")
     return jsonify({"token": token}), HTTPStatus.OK
 
 if __name__ == "__main__":
