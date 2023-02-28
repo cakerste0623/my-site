@@ -46,6 +46,7 @@ def parseDataAndPush(track):
     track_data['genre'] = getGenre(track.get('artists')[0].get('external_urls').get('spotify'))
     track_data['releaseYear'] = track.get('album').get('release_date')[0:4]
     track_data['coverImage'] = track.get('album').get('images')[0].get('url')
+    track_data['preview'] = track.get('preview_url')
     track_data['createTimestamp'] = str(datetime.datetime.now())
     track_data['_id'] = createId(track_data)
 
