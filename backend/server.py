@@ -53,7 +53,7 @@ def parseDataAndPush(track):
     try:
         songs.insert_one(track_data)
     except:
-        return {"msg": "Error saving track to database"}, HTTPStatus.BAD_REQUEST
+        return {"msg": "Error saving track to database"}
     return track_data
 
 @app.route('/song', methods=['POST', 'GET'])
@@ -78,7 +78,10 @@ def post_and_get_song():
         except:
             return jsonify({"msg": "Could not find track with the given id"}), HTTPStatus.NOT_FOUND
         t = parseDataAndPush(track)
-        return jsonify(t), HTTPStatus.OK
+        if t.get('msg') is not None:
+            return jsonify(t), HTTPStatus.BAD_REQUEST
+        else:
+            return jsonify(t), HTTPStatus.OK
     elif request.method == 'GET':
         latest_song = songs.find_one(sort=[('createTimestamp', DESCENDING)])
         return jsonify(latest_song), HTTPStatus.OK
