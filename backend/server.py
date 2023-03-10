@@ -56,6 +56,12 @@ def parseDataAndPush(track):
         return {"msg": "Error saving track to database"}
     return track_data
 
+def getTrackById(id):
+    pass
+
+def getTrackBySongAndArtist(song, artist):
+    pass
+
 @app.route('/song', methods=['POST', 'GET'])
 def post_and_get_song():
     if request.method == 'POST':
@@ -72,6 +78,13 @@ def post_and_get_song():
             return {"msg": "Invalid token"}, HTTPStatus.UNAUTHORIZED
 
         data = request.get_json(force=True)
+
+        if data.get('id') is not None:
+            getTrackById(data.get('id'))
+        elif data.get('song') is not None and data.get('artist') is not None:
+            getTrackBySongAndArtist(data.get('song'), data.get('artist'))
+        else:
+            return {"msg": "Invalid request"}, HTTPStatus.BAD_REQUEST
 
         try:
             track = sp.track(track_id=data.get('id'))
