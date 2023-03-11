@@ -57,10 +57,19 @@ def parseDataAndPush(track):
     return track_data
 
 def getTrackById(id):
-    pass
+    try:
+        track = sp.track(id)
+    except:
+        return {"msg": "Could not find track with the given id"}
+    return track
 
 def getTrackBySongAndArtist(song, artist):
-    pass
+    query = "artist: {a} track: {t}"
+    try:
+        track = sp.search(q=query.format(a=artist, t=song), type="track", limit=1)
+    except:
+        return {"msg": "Could not find track with the given track/artist"}
+    return track.get('tracks').get('items')[0]
 
 @app.route('/song', methods=['POST', 'GET'])
 def post_and_get_song():
@@ -80,16 +89,15 @@ def post_and_get_song():
         data = request.get_json(force=True)
 
         if data.get('id') is not None:
-            getTrackById(data.get('id'))
+            track = getTrackById(data.get('id'))
         elif data.get('song') is not None and data.get('artist') is not None:
-            getTrackBySongAndArtist(data.get('song'), data.get('artist'))
+            track = getTrackBySongAndArtist(data.get('song'), data.get('artist'))
         else:
             return {"msg": "Invalid request"}, HTTPStatus.BAD_REQUEST
 
-        try:
-            track = sp.track(track_id=data.get('id'))
-        except:
-            return jsonify({"msg": "Could not find track with the given id"}), HTTPStatus.NOT_FOUND
+        if track.get('msg') is not None:
+            return jsonify(track), HTTPStatus.BAD_REQUEST
+
         t = parseDataAndPush(track)
         if t.get('msg') is not None:
             return jsonify(t), HTTPStatus.BAD_REQUEST
