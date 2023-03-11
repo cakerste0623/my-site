@@ -21,5 +21,6 @@ COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 RUN rm -rf /usr/share/nginx/html/*
 
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/src/assets /usr/share/nginx/html/assets
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
