@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+    backend:
+        image: cakerste/collins-site-backend:latest
+        container_name: backend
+        environment:
+          - FLASK_APP=server.py
+        env_file:
+          - .env
+        depends_on:
+          - mongodb
+        volumes:
+          - ./backend:/src
+    frontend:
+        image: cakerste/collins-site-frontend:latest
+        container_name: frontend
+        ports:
+          - 80:80
+        depends_on:
+          - backend
+    
+    mongodb:
+        image: mongo:latest
+        container_name: mongodb
+        ports:
+          - 27017:27017
+        env_file:
+          - .env
+        volumes:
+          - mongodb_data:/data/db
+          - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+        command: [--auth]
+        restart: always
+volumes:
+    mongodb_data:
+        
+
