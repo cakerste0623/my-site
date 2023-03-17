@@ -36,7 +36,10 @@ def getArtists(artists):
 
 def getGenre(artist):
     artist_data = sp.artist(artist)
-    return capwords(artist_data.get('genres')[0])
+    genres = artist_data.get('genres')
+    if not genres:
+        return "N/A"
+    return capwords(genres[0])
 
 def parseDataAndPush(track):
     track_data = {}
