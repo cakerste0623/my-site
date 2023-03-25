@@ -1,15 +1,11 @@
 from http import HTTPStatus
-import json
 import os
-from string import capwords
 from flask import Flask, jsonify, request
-import hashlib
 import datetime
 import jwt
 from pymongo import MongoClient, DESCENDING
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 from werkzeug.security import check_password_hash
+from utils import *
 
 # Time that the JWT is valid for (in seconds)
 exp_time = 300
@@ -18,61 +14,6 @@ app = Flask(__name__)
 client = MongoClient("mongodb", username=os.environ['MONGO_USERNAME'], password=os.environ['MONGO_PWD'], authSource="server")
 db = client.server
 songs = db.songs
-
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=os.environ['CLIENT_ID'], 
-                                                           client_secret=os.environ['CLIENT_SECRET']))
-
-def createId(data):
-    hash = hashlib.md5()
-    encoded = json.dumps(data, sort_keys=True).encode()
-    hash.update(encoded)
-    return str(hash.hexdigest())
-
-def getArtists(artists):
-    list_of_artists = []
-    for artist in artists:
-        list_of_artists.append(artist.get('name'))
-    return list_of_artists
-
-def getGenre(artist):
-    artist_data = sp.artist(artist)
-    genres = artist_data.get('genres')
-    if not genres:
-        return "N/A"
-    return capwords(genres[0])
-
-def parseDataAndPush(track):
-    track_data = {}
-    track_data['name'] = track.get('name')
-    track_data['artists'] = getArtists(track.get('artists'))
-    track_data['album'] = track.get('album').get('name')
-    track_data['genre'] = getGenre(track.get('artists')[0].get('external_urls').get('spotify'))
-    track_data['releaseYear'] = track.get('album').get('release_date')[0:4]
-    track_data['coverImage'] = track.get('album').get('images')[0].get('url')
-    track_data['preview'] = track.get('preview_url')
-    track_data['createTimestamp'] = str(datetime.datetime.now())
-    track_data['_id'] = createId(track_data)
-
-    try:
-        songs.insert_one(track_data)
-    except:
-        return {"msg": "Error saving track to database"}
-    return track_data
-
-def getTrackById(id):
-    try:
-        track = sp.track(id)
-    except:
-        return {"msg": "Could not find track with the given id"}
-    return track
-
-def getTrackBySongAndArtist(song, artist):
-    query = "artist: {a} track: {t}"
-    try:
-        track = sp.search(q=query.format(a=artist, t=song), type="track", limit=1)
-    except:
-        return {"msg": "Could not find track with the given track/artist"}
-    return track.get('tracks').get('items')[0]
 
 @app.route('/song', methods=['POST', 'GET'])
 def post_and_get_song():
@@ -101,11 +42,12 @@ def post_and_get_song():
         if track.get('msg') is not None:
             return jsonify(track), HTTPStatus.BAD_REQUEST
 
-        t = parseDataAndPush(track)
-        if t.get('msg') is not None:
-            return jsonify(t), HTTPStatus.BAD_REQUEST
-        else:
-            return jsonify(t), HTTPStatus.OK
+        t = parseData(track)
+        try:
+            songs.insert_one(t)
+        except:
+            return t, HTTPStatus.BAD_REQUEST
+        return t, HTTPStatus.OK
     elif request.method == 'GET':
         latest_song = songs.find_one(sort=[('createTimestamp', DESCENDING)])
         return jsonify(latest_song), HTTPStatus.OK
