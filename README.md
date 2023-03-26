@@ -1,1 +1,6 @@
-# my-site
+# Link
+[https://www.collinkersten.com/](https://www.collinkersten.com/)
+# About
+This is a personal website that shows a short bio about myself, what my current favorite song is, and my resume. I can run a script that will hit one of my APIs that will call the Spotify API and return information about the song, and then my API saves that information to a Mongo database. The frontend will then use a different API to grab the most recent entry in the database (aka my current favorite song) and display it.
+# Infrastructure overview
+This is a containerized app consisting of a frontend container using the Vue.js framework, a backend container using the Flask framework, and a container running MongoDB. The frontend container also is running Nginx, which serves the static assets from Vue.js, as well as providing route for the Flask container, which allows me to access my APIs without exposing the backend container directly. All of these containers are running on an EC2 instance on AWS. I purchased the domain using Amazon's Route 53 manager. HTTPS is handled using LetsEncrypt. I used the certbot tool in my frontend container (running Nginx) and requested a free LetsEncrypt certificate. That container also mounts the volume of the certificate configuration, so it is persisted even if the container is updated.
