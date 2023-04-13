@@ -77,3 +77,46 @@ def test_get_genre_no_genre():
   data = "https://open.spotify.com/artist/3dBOwPj9GaClkPMJXIruFP"
   genre = getGenre(data)
   assert genre == "N/A"
+
+def test_get_track_by_id():
+  data = "2ciMJGCDW70hqq18Vgui68"
+  track = getTrackById(data)
+  assert track.get('name') == "Who'll Stop The Rain"
+  assert len(track.get('artists'))
+  assert track.get('artists')[0].get('name') == "Creedence Clearwater Revival"
+
+def test_get_track_by_id_invalid():
+  data = "INVALID_TRACK_ID"
+  track = getTrackById(data)
+  assert track.get('msg') == "Could not find track with the given id"
+
+def test_get_track_by_song_artist():
+  song = "Not My Baby"
+  artist = "Alvvays"
+  track = getTrackBySongAndArtist(song, artist)
+  assert track.get('name') == song
+  assert len(track.get('artists')) == 1
+  assert track.get('artists')[0].get('name') == artist
+
+def test_get_track_by_song_artist_imprecise():
+  song = "Your mirror ill be"
+  artist = "the velvets"
+  track = getTrackBySongAndArtist(song, artist)
+  assert track.get('name') == "I'll Be Your Mirror"
+  assert len(track.get('artists')) == 2
+  assert track.get('artists')[0].get('name') == "The Velvet Underground"
+  assert track.get('artists')[1].get('name') == "Nico"
+
+def test_parse_data():
+  song = "The Divine Chord"
+  artist = "The Avalanches"
+  track = getTrackBySongAndArtist(song, artist)
+  parsed_track = parseData(track)
+  assert parsed_track.get('name') == "The Divine Chord"
+  assert len(parsed_track.get('artists')) == 3
+  assert parsed_track.get('artists')[0] == "The Avalanches"
+  assert parsed_track.get('artists')[1] == "MGMT"
+  assert parsed_track.get('artists')[2] == "Johnny Marr"
+  assert parsed_track.get('album') == "We Will Always Love You"
+  assert parsed_track.get('releaseYear') == "2020"
+  assert parsed_track.get('_id') is not None
