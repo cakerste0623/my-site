@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Check out project') {
+            steps {
+                echo 'Check out project'
+            }
+        }
+        
+        stage('Run tests') {
+            steps {
+                echo 'Run tests'
+            }
+        }
+        
+        stage('Build docker images') {
+            steps {
+                echo 'Build docker images'
+            }
+        }
+        
+        stage('Update EC2 instance') {
+            steps {
+                echo 'Update EC2 instance'
+            }
+        }
+    }
+}
