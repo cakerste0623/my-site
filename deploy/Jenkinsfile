@@ -38,12 +38,13 @@ pipeline {
         stage('Run tests') {
             steps {
                 echo 'Run tests'
+                sh 'docker exec backend python -m pytest'
             }
         }
         
-        stage('Build docker images') {
+        stage('Tag and push docker images') {
             steps {
-                echo 'Build docker images'
+                echo 'Tag and push docker images'
             }
         }
         
