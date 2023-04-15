@@ -2,9 +2,36 @@ pipeline {
     agent any
 
     stages {
+        stage('Clear docker environment') {
+            steps {
+                // the 'or true' part is to prevent the job from failing if no containers are running
+                sh 'docker stop $(docker ps -aq) || true'
+                sh 'docker rm $(docker ps -aq) || true'
+                sh 'docker image prune -af'
+                sh 'docker volume prune -f'
+            }
+        }
+        stage('Build env file') {
+            steps {
+                echo 'Building env file'
+                withCredentials([file(credentialsId: 'my-site-env', variable: 'envfile')]) {
+                    sh 'cat $envfile > .env'
+                }
+                
+            }
+        }
         stage('Check out project') {
             steps {
                 echo 'Check out project'
+                git branch: 'main', 
+                    url: 'https://github.com/cakerste0623/my-site.git'
+            }
+        }
+        
+        stage('Build project') {
+            steps {
+                echo 'Build project'
+                sh 'docker compose -f docker-compose.yml up -d'
             }
         }
         
