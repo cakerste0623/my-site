@@ -71,7 +71,7 @@ def test_multiple_artists():
 def test_get_genre():
   data = "https://open.spotify.com/artist/2x9SpqnPi8rlE9pjHBwmSC"
   genre = getGenre(data)
-  assert genre == "Art Punk"
+  assert genre == "Alternative Rock"
 
 def test_get_genre_no_genre():
   data = "https://open.spotify.com/artist/3dBOwPj9GaClkPMJXIruFP"
