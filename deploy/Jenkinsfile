@@ -47,6 +47,8 @@ pipeline {
                 echo 'Tag and push docker images'
                 sh 'docker tag collins-site-backend:latest cakerste/collins-site-backend:latest'
                 sh 'docker tag collins-site-frontend:latest cakerste/collins-site-frontend:latest'
+                sh 'docker tag collins-site-backend:latest cakerste/collins-site-backend:${BUILD_NUMBER}'
+                sh 'docker tag collins-site-frontend:latest cakerste/collins-site-frontend:${BUILD_NUMBER}'
                 
                 withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
@@ -54,6 +56,8 @@ pipeline {
                 
                 sh 'docker push cakerste/collins-site-backend:latest'
                 sh 'docker push cakerste/collins-site-frontend:latest'
+                sh 'docker push cakerste/collins-site-backend:${BUILD_NUMBER}'
+                sh 'docker push cakerste/collins-site-frontend:${BUILD_NUMBER}'
             }
         }
         
