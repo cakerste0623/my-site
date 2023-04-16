@@ -45,6 +45,15 @@ pipeline {
         stage('Tag and push docker images') {
             steps {
                 echo 'Tag and push docker images'
+                sh 'docker tag collins-site-backend:latest cakerste/collins-site-backend:latest'
+                sh 'docker tag collins-site-frontend:latest cakerste/collins-site-frontend:latest'
+                
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'docker login -u $USERNAME -p $PASSWORD'
+                }
+                
+                sh 'docker push cakerste/collins-site-backend:latest'
+                sh 'docker push cakerste/collins-site-frontend:latest'
             }
         }
         
