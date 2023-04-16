@@ -1,6 +1,7 @@
 version: '3.7'
 services:
     backend:
+        image: collins-site-backend
         container_name: backend
         build:
             context: backend
@@ -13,6 +14,7 @@ services:
         volumes:
           - ./backend:/src
     frontend:
+        image: collins-site-frontend
         container_name: frontend
         ports:
           - 80:80
