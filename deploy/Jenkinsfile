@@ -58,8 +58,8 @@ pipeline {
                 
                 sh 'docker push cakerste/collins-site-backend:latest'
                 sh 'docker push cakerste/collins-site-frontend:latest'
-                //sh 'docker push cakerste/collins-site-backend:${BUILD_NUMBER}'
-                //sh 'docker push cakerste/collins-site-frontend:${BUILD_NUMBER}'
+                sh 'docker push cakerste/collins-site-backend:${BUILD_NUMBER}'
+                sh 'docker push cakerste/collins-site-frontend:${BUILD_NUMBER}'
             }
         }
         
