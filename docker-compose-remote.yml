@@ -19,7 +19,6 @@ services:
           - 443:443
         depends_on:
           - backend
-    
     mongodb:
         image: mongo:latest
         container_name: mongodb
@@ -34,5 +33,4 @@ services:
         restart: always
 volumes:
     mongodb_data:
-        
-
+        name: my-site_mongodb_data

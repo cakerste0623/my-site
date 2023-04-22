@@ -38,5 +38,4 @@ services:
         restart: always
 volumes:
     mongodb_data:
-        
-
+        name: my-site_mongodb_data
