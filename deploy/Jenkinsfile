@@ -4,6 +4,8 @@ pipeline {
     stages {
         stage('Clear docker environment') {
             steps {
+                sh 'docker context use default'
+                sh 'docker context rm my-ec2-context -f || true'
                 // the 'or true' part is to prevent the job from failing if no containers are running
                 sh 'docker stop $(docker ps -aq) || true'
                 sh 'docker rm $(docker ps -aq) || true'
@@ -56,14 +58,22 @@ pipeline {
                 
                 sh 'docker push cakerste/collins-site-backend:latest'
                 sh 'docker push cakerste/collins-site-frontend:latest'
-                sh 'docker push cakerste/collins-site-backend:${BUILD_NUMBER}'
-                sh 'docker push cakerste/collins-site-frontend:${BUILD_NUMBER}'
+                //sh 'docker push cakerste/collins-site-backend:${BUILD_NUMBER}'
+                //sh 'docker push cakerste/collins-site-frontend:${BUILD_NUMBER}'
             }
         }
         
         stage('Update EC2 instance') {
             steps {
                 echo 'Update EC2 instance'
+                sshagent(credentials: ['collin_ec2']) {
+                    sh '[ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh'
+                    sh 'ssh-keyscan -t rsa,dsa 100.26.9.209 >> ~/.ssh/known_hosts'
+                    sh 'docker context create my-ec2-context --docker \\"host=ssh://ubuntu@100.26.9.209:22\\" || true'
+                    sh 'docker context ls'
+                    sh 'docker context use my-ec2-context'
+                    sh 'docker ps'
+                }
             }
         }
     }
