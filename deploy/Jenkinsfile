@@ -5,8 +5,8 @@ pipeline {
         stage('Clear docker environment') {
             steps {
                 sh 'docker context use default'
+                // the 'or true' part is to prevent the job from failing if the condition is already met
                 sh 'docker context rm my-ec2-context -f || true'
-                // the 'or true' part is to prevent the job from failing if no containers are running
                 sh 'docker stop $(docker ps -aq) || true'
                 sh 'docker rm $(docker ps -aq) || true'
                 sh 'docker image prune -af'
@@ -73,6 +73,16 @@ pipeline {
                     sh 'docker context ls'
                     sh 'docker context use my-ec2-context'
                     sh 'docker ps'
+                    
+                    sh 'docker stop $(docker ps -aq)'
+                    sh 'docker rm $(docker ps -aq)'
+                    sh 'docker pull cakerste/collins-site-frontend'
+                    sh 'docker pull cakerste/collins-site-backend'
+                    sh 'docker compose -f docker-compose-remote.yml up -d'
+                    sh 'docker exec frontend apt-get update -y'
+                    sh 'docker exec frontend apt-get install certbot -y'
+                    sh 'docker exec frontend apt-get install python3-certbot-nginx -y'
+                    sh 'docker exec frontend certbot --nginx -d collinkersten.com -d www.collinkersten.com --non-interactive --agree-tos -m cak0623@gmail.com'
                 }
             }
         }
