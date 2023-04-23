@@ -21,7 +21,7 @@
     </v-navigation-drawer>
     </v-main>
     <router-view />
-    <v-footer class="bg-red-lighten-1 text-center d-flex flex-column">
+    <v-footer class="bg-red-lighten-1 text-center flex-column">
       <div>
         <v-btn class="mx-16" icon="mdi-linkedin" variant="text" key="mdi-linkedin" href="https://www.linkedin.com/in/collin-kersten-6236221aa/" target="_blank"></v-btn>
         <v-btn class="mx-16" icon="mdi-twitter" variant="text" key="mdi-twitter" href="https://twitter.com/CollinKersten" target="_blank"></v-btn>
