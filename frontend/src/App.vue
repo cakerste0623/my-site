@@ -47,3 +47,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.v-footer {
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+}
+</style>
