@@ -1,4 +1,4 @@
-FROM node:lts-alpine as builder
+FROM node:lts-alpine3.17 as builder
 
 RUN npm install -g http-server
 
@@ -16,7 +16,7 @@ RUN npm run build
 
 CMD ["http-server", "dist"]
 
-FROM nginx:latest as production-build
+FROM nginx:1.23.4 as production-build
 
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 

@@ -20,7 +20,7 @@ services:
         depends_on:
           - backend
     mongodb:
-        image: mongo:latest
+        image: mongo:6.0.5
         container_name: mongodb
         ports:
           - 27017:27017
