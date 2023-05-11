@@ -74,6 +74,7 @@ pipeline {
                     sh 'docker context use my-ec2-context'
                     sh 'docker ps'
                     
+                    sh 'docker rmi -f $(docker image ls -a -q)'
                     sh 'docker stop $(docker ps -aq)'
                     sh 'docker rm $(docker ps -aq)'
                     sh 'docker pull cakerste/collins-site-frontend'
